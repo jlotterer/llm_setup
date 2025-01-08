@@ -22,23 +22,21 @@ check_status() {
 }
 
 echo "Uninstalling previous versions..."
-
-sudo apt-get purge 'nvidia*'
-sudo apt-get autoremove
-sudo apt-get autoclean
-sudo apt-get remove --purge -V "nvidia-driver*" "libxnvctrl*"
+# Using yes command to pipe "y" responses to apt commands
+yes | sudo apt-get purge 'nvidia*'
+yes | sudo apt-get autoremove
+yes | sudo apt-get autoclean
+yes | sudo apt-get remove --purge -V "nvidia-driver*" "libxnvctrl*"
 
 # Remove Outdated Signing Key
-sudo apt-key del 7fa2af80
+sudo apt-key del 7fa2af80 2>/dev/null || true
 
 # To clean up the uninstall
-sudo apt-get autoremove --purge -V
+yes | sudo apt-get autoremove --purge -V
+
 # To remove CUDA Toolkit
-sudo apt-get --purge remove "*cuda*" "*cublas*" "*cufft*" "*cufile*" "*curand*" \
+yes | sudo apt-get --purge remove "*cuda*" "*cublas*" "*cufft*" "*cufile*" "*curand*" \
  "*cusolver*" "*cusparse*" "*gds-tools*" "*npp*" "*nvjpeg*" "nsight*" "*nvvm*"
+
 check_status "Uninstallation"
-
-
-
-
 echo "Nvidia removal completed!"
