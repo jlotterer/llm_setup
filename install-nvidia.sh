@@ -21,22 +21,35 @@ check_status() {
     fi
 }
 
-echo "Uninstalling previous versions..."
+echo "Installing Nvidia Toolkit..."
 # Using yes command to pipe "y" responses to apt commands
-yes | sudo apt-get purge 'nvidia*'
-yes | sudo apt-get -y autoremove
-yes | sudo apt-get autoclean
-yes | sudo apt-get remove --purge -V "nvidia-driver*" "libxnvctrl*"
+# CUDA toolkit installer
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+sudo dpkg -i cuda-keyring_1.1-1_all.deb
+sudo apt-get update
 
-# Remove Outdated Signing Key
-sudo apt-key del 7fa2af80 2>/dev/null || true
 
-# To clean up the uninstall
-yes | sudo apt-get autoremove --purge -V
+# CUDA driver install
+sudo apt-get install -y cuda-drivers
 
-# To remove CUDA Toolkit
-yes | sudo apt-get --purge remove "*cuda*" "*cublas*" "*cufft*" "*cufile*" "*curand*" \
- "*cusolver*" "*cusparse*" "*gds-tools*" "*npp*" "*nvjpeg*" "nsight*" "*nvvm*"
+# Nvidia driver install
+sudo apt-get -y install nvidia-driver-565
 
-check_status "Uninstallation"
-echo "Nvidia removal completed!"
+
+
+
+# Add NVIDIA package repositories
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+
+curl -fsSL https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+# Update package listings
+sudo apt-get update
+
+# Install nvidia-container-toolkit
+sudo apt-get install -y nvidia-container-toolkit
+
+
+check_status "Installation"
+echo "Nvidia installation completed!"
