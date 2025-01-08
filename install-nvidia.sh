@@ -24,7 +24,7 @@ check_status() {
 echo "Uninstalling previous versions..."
 # Using yes command to pipe "y" responses to apt commands
 yes | sudo apt-get purge 'nvidia*'
-yes | sudo apt-get autoremove
+yes | sudo apt-get -y autoremove
 yes | sudo apt-get autoclean
 yes | sudo apt-get remove --purge -V "nvidia-driver*" "libxnvctrl*"
 
