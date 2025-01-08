@@ -32,8 +32,8 @@ cd bolt.diy
 # Initialize git repository (required for build)
 print_status "Initializing git repository..."
 git init
-git config user.email "temp@example.com"
-git config user.name "Temporary User"
+git config user.email "jlotterer@hotmail.com"
+git config user.name "jlotterer"
 git add .
 git commit -m "Initial commit"
 
